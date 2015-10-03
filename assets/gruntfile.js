@@ -14,8 +14,7 @@ module.exports = function (grunt) {
         },
         files: {
           'js/dist/plugins.js': ['<%= concat.plugins.dest %>'],
-          'js/dist/app.js': ['<%= concat.app.dest %>'],
-          'bower_components/modernizr/modernizr.min.js': ['bower_components/modernizr/modernizr.js']
+          'js/dist/app.js': ['<%= concat.app.dest %>']
         }
       },
       dev: {
@@ -42,20 +41,6 @@ module.exports = function (grunt) {
         src: ['js/dev/**/*.js'],
         dest: 'js/tmp/app.concat.js',
         nonull: true
-      }
-    },
-    compass: {
-      dist: {
-        options: {
-          config: 'config.rb',
-          basePath: ''
-        }
-      },
-      dev: {
-        options: {
-          config: 'config-dev.rb',
-          basePath: ''
-        }
       }
     },
     watch: {
@@ -91,30 +76,11 @@ module.exports = function (grunt) {
       }
     },
     clean: ["js/tmp"],
-    jshint: {
-      src: ['js/dist/**/*.js'],
-      options: {
-        force: false,
-        unused: true,
-        browser: true,
-        globals: {
-          jQuery: true,
-          _: true,
-          Backbone: true,
-          console: true
-        }
-      }
-    },
     autoprefixer: {
       // prefix the specified file
       single_file: {
         src: 'app.css',
         dest: 'app.css'
-      }
-    },
-    exec: {
-      sprites: {
-        command: 'glue images/_sprites/ scss/partials --retina --padding=1 --force --scss-template=sprite-tpl.jinja --img=images --sprite-namespace= --namespace= --scss'
       }
     },
     sass: {
@@ -130,24 +96,6 @@ module.exports = function (grunt) {
           'login.css': 'scss/login.scss'
         }
       }
-    },
-    imagemin: {                          // Task
-      dynamic: {                         // Another target
-        files: [{
-          expand: true,                  // Enable dynamic expansion
-          cwd: 'raw-images/',                   // Src matches are relative to this path
-          src: ['**/*.{png,jpg,gif}'],   // Actual patterns to match
-          dest: 'images/'                  // Destination path prefix
-        }]
-      },
-      static: {                         // Another target
-        files: [{
-          expand: true,                  // Enable dynamic expansion
-          cwd: '../_sb_website/',                   // Src matches are relative to this path
-          src: ['**/*.{png,jpg,gif}'],   // Actual patterns to match
-          dest: '../_sb_website/optimized/'                  // Destination path prefix
-        }]
-      }
     }
   });
 
@@ -155,14 +103,10 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-compass');
   grunt.loadNpmTasks('grunt-sass');
-  grunt.loadNpmTasks('grunt-contrib-imagemin');
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-autoprefixer');
   grunt.loadNpmTasks('grunt-notify');
-  grunt.loadNpmTasks('grunt-exec');
 
   // Default task(s).
   grunt.registerTask('default', ['concat', 'uglify', 'compass:dev', 'autoprefixer', 'clean', 'jshint']);

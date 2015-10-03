@@ -14,7 +14,23 @@ class ReminderModel
      * Post ID of the related content
      * @var int
      */
-    public $targetPostId = null;
+    public $target = null;
+
+    /**
+     *
+     * @var string
+     */
+    public $type = 'any';
+
+    /**
+     * unix timestamp
+     * @var null|int
+     */
+    public $date = null;
+
+    public $noticemsg;
+
+    public $mailmsg;
     /**
      * @var \WP_Post;
      */

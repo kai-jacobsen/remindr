@@ -17,6 +17,8 @@ class EditScreen
      */
     protected $post;
 
+    protected $basename = 'svkj_remindr';
+
     /**
      * @param \WP_Post $post
      */
@@ -34,6 +36,14 @@ class EditScreen
     public function setupForm()
     {
         include_once Remindr::getInstance()->getPluginPath() . '/ui/edit-form.php';
+    }
+
+    /**
+     * @param $key
+     * @return string
+     */
+    public function fieldName($key){
+        return $this->basename . '[' . $key . ']';
     }
 
 }
