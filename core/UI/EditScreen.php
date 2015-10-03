@@ -35,6 +35,7 @@ class EditScreen
 
     public function setupForm()
     {
+        $this->model->prepare();
         include_once Remindr::getInstance()->getPluginPath() . '/ui/edit-form.php';
     }
 

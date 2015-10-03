@@ -2,6 +2,11 @@
 
 namespace SVKJ\Remindr\Model;
 
+use SVKJ\Remindr\UI\Inputs\CustomDateInput;
+use SVKJ\Remindr\UI\Inputs\DateInput;
+use SVKJ\Remindr\UI\Inputs\TargetInput;
+use SVKJ\Remindr\UI\Inputs\TypeInput;
+
 
 /**
  * Class ReminderModel
@@ -12,25 +17,40 @@ class ReminderModel
 
     /**
      * Post ID of the related content
-     * @var int
+     * @var \SVKJ\Remindr\UI\Inputs\TargetInput
      */
-    public $target = null;
+    public $target;
 
     /**
-     *
      * @var string
      */
-    public $type = 'any';
+    public $type;
 
     /**
-     * unix timestamp
      * @var null|int
      */
-    public $date = null;
+    public $date;
 
+    /**
+     * @var
+     */
+    public $customdate;
+
+    /**
+     * @var string
+     */
     public $noticemsg;
 
+    /**
+     * @var string
+     */
     public $mailmsg;
+
+    /**
+     * @var int
+     */
+    public $count = 0;
+
     /**
      * @var \WP_Post;
      */
@@ -42,6 +62,10 @@ class ReminderModel
     public function __construct( $post )
     {
         $this->post = $post;
+        $this->target = new TargetInput( 'target', $this );
+        $this->type = new TypeInput( 'type', $this );
+        $this->date = new DateInput( 'date', $this );
+        $this->customdate = new CustomDateInput('customdate', $this);
         $this->refresh();
     }
 
@@ -53,9 +77,9 @@ class ReminderModel
         $meta = get_post_custom( $this->post->ID );
         $map = array();
         foreach ($meta as $key => $val) {
-            if (strpos( $key, '_remindr_' )) {
+            if (strpos( $key, '_remindr_' ) !== false) {
                 $cleanKey = str_replace( '_remindr_', '', $key );
-                $map[$cleanKey] = $val;
+                $map[$cleanKey] = $val[0];
             }
         }
         $this->set( $map );
@@ -72,8 +96,11 @@ class ReminderModel
         }
 
         foreach ($map as $key => $value) {
-            if (property_exists( $this, $key )) {
-                $this->$key = $value;
+            if (is_object( $this->$key )) {
+                if (!is_null( $this->$key->value && $this->$key->value !== $value )) {
+                    $this->$key->changed = true;
+                }
+                $this->$key->setValue( $value );
             }
         }
     }
@@ -84,9 +111,10 @@ class ReminderModel
      */
     public function sync()
     {
-        $vars = $this->getPublicProperties();
-        foreach ($vars as $key => $value) {
-            $this->updateMeta( $key, $value );
+        foreach ($this->getPublicProperties() as $object) {
+            if (is_object( $object )) {
+                $object->sync();
+            }
         }
     }
 
@@ -98,25 +126,6 @@ class ReminderModel
         return call_user_func( 'get_object_vars', $this );
     }
 
-    /**
-     * @param $key
-     * @param $value
-     */
-    public function updateMeta( $key, $value )
-    {
-        update_post_meta( $this->post->ID, $this->prefixKey( $key ), $value );
-    }
-
-    /**
-     * @param $key
-     * @return string
-     */
-    public function prefixKey( $key )
-    {
-        if (!strpos( $key, '_remindr_' )) {
-            return '_remindr_' . $key;
-        }
-    }
 
     /**
      * @param $property
@@ -127,7 +136,25 @@ class ReminderModel
         if (property_exists( $this, $property )) {
             return $this->$property;
         }
-
         return null;
     }
+
+    public function prepare()
+    {
+
+        foreach ($this->getPublicProperties() as $object) {
+            if (is_object( $object )) {
+                $object->prepare();
+            }
+        }
+    }
+
+    /**
+     * @return \WP_Post
+     */
+    public function getPost()
+    {
+        return $this->post;
+    }
+
 }

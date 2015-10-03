@@ -1,8 +1,6 @@
 <?php
-
-$targetContent = new \SVKJ\Remindr\UI\Inputs\TargetContent( $this->model );
+d( $this->model );
 ?>
-
 <div class="remindr-wrap wrap">
     <div class="remindr-inner">
         <table class="form-table">
@@ -12,8 +10,9 @@ $targetContent = new \SVKJ\Remindr\UI\Inputs\TargetContent( $this->model );
                 <td>
                     <select name="<?php echo $this->fieldName( 'target' ) ?>">
                         <?php
-                        foreach ($targetContent->posts as $post) { ?>
-                            <option><?php echo $post->post_title; ?></option>
+                        foreach ($this->model->get( 'target' )->posts as $post) { ?>
+                            <option <?php selected( $this->model->get( 'target' )->getValue(), $post->ID ) ?>
+                                value="<?php echo $post->ID ?>"><?php echo $post->post_title; ?></option>
                         <?php } ?>
                     </select>
                 </td>
@@ -25,16 +24,19 @@ $targetContent = new \SVKJ\Remindr\UI\Inputs\TargetContent( $this->model );
                 <td>
                     <fieldset>
                         <label>
-                            <input type="radio" name="<?php echo $this->fieldName( 'type' ); ?>"
-                                   value="adminnotice">
+                            <input <?php checked( $this->model->get( 'type' )->getValue(), 'adminnotice' ) ?>
+                                type="radio" name="<?php echo $this->fieldName( 'type' ); ?>"
+                                value="adminnotice">
                             <?php _e( 'Admin notice', 'yxcasd' ); ?></label>
                         <br>
                         <label>
-                            <input type="radio" name="<?php echo $this->fieldName( 'type' ); ?>" value="mail">
+                            <input <?php checked( $this->model->get( 'type' )->getValue(), 'mail' ) ?>
+                                type="radio" name="<?php echo $this->fieldName( 'type' ); ?>" value="mail">
                             <?php _e( 'Mail', 'yxcasd' ); ?></label>
                         <br>
                         <label>
-                            <input type="radio" name="<?php echo $this->fieldName( 'type' ); ?>" value="any">
+                            <input <?php checked( $this->model->get( 'type' )->getValue(), 'any' ) ?>
+                                type="radio" name="<?php echo $this->fieldName( 'type' ); ?>" value="any">
                             <?php _e( 'Any', 'yxcasd' ); ?></label>
                     </fieldset>
                 </td>
@@ -46,22 +48,37 @@ $targetContent = new \SVKJ\Remindr\UI\Inputs\TargetContent( $this->model );
                 <td>
                     <fieldset>
                         <label>
-                            <input type="radio" name="<?php echo $this->fieldName( 'date' ); ?>"
-                                   value="86400">
+                            <input <?php checked( $this->model->get( 'date' )->getValue(), '86400' ) ?>
+                                type="radio"
+                                name="<?php echo $this->fieldName( 'date' ); ?>"
+                                value="86400">
                             <?php _e( 'Tomorrow', 'yxcasd' ); ?></label>
                         <br>
                         <label>
-                            <input type="radio" name="<?php echo $this->fieldName( 'date' ); ?>" value="604800">
+                            <input
+                                <?php checked( $this->model->get( 'date' )->getValue(), '604800' ) ?>
+                                type="radio"
+                                name="<?php echo $this->fieldName( 'date' ); ?>"
+                                value="604800">
                             <?php _e( 'in one week', 'yxcasd' ); ?></label>
                         <br>
                         <label>
-                            <input type="radio" name="<?php echo $this->fieldName( 'date' ); ?>" value="18144000">
+                            <input
+                                <?php checked( $this->model->get( 'date' )->getValue(), '2592000    ' ) ?>
+                                type="radio"
+                                name="<?php echo $this->fieldName( 'date' ); ?>"
+                                value="2592000">
                             <?php _e( 'in one month', 'yxcasd' ); ?></label>
                         <br>
                         <label>
-                            <input type="radio" name="<?php echo $this->fieldName( 'date' ); ?>" value="custom">
+                            <input
+                                <?php checked( $this->model->get( 'date' )->getValue(), 'custom' ) ?>
+                                type="radio"
+                                name="<?php echo $this->fieldName( 'date' ); ?>"
+                                value="custom">
                             <?php _e( 'Custom date', 'yxcasd' ); ?></label>
-                        <input type="text" name="<?php echo $this->fieldName( 'customdate' ); ?>" value="">
+                        <input type="text" name="<?php echo $this->fieldName( 'customdate' ); ?>"
+                               value="<?php echo $this->model->get( 'customdate' )->getValue() ?>">
                     </fieldset>
                 </td>
             </tr>
@@ -81,7 +98,11 @@ $targetContent = new \SVKJ\Remindr\UI\Inputs\TargetContent( $this->model );
                 </th>
                 <td>
                     <?php
-                    wp_editor( '','remindrmailmsg', array( 'media_buttons' => false, 'textarea_name' => $this->fieldName('mailmsg') ) );
+                    wp_editor(
+                        '',
+                        'remindrmailmsg',
+                        array( 'media_buttons' => false, 'textarea_name' => $this->fieldName( 'mailmsg' ) )
+                    );
                     ?>
                 </td>
             </tr>

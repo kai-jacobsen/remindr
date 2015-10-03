@@ -2,6 +2,9 @@
 
 namespace SVKJ\Remindr;
 
+use SVKJ\Remindr\Model\ReminderModel;
+use SVKJ\Remindr\Model\ValueStorage;
+
 
 /**
  * Class Remindr
@@ -46,6 +49,7 @@ class Remindr
         if (is_admin()) {
             add_action( 'init', array( $this, 'registerPostType' ) );
             add_action( 'add_meta_boxes', array( $this, 'setupInterface' ), 10, 2 );
+            add_action( 'save_post', array( $this, 'savePost' ), 10, 2 );
         }
     }
 
@@ -85,6 +89,14 @@ class Remindr
             $editScreen = new UI\EditScreen( $post );
             $editScreen->run();
         }
+    }
+
+    public function savePost( $post_id, $post )
+    {
+        $data = $_POST['svkj_remindr'];
+        $model = new ReminderModel($post);
+        $model->set($data);
+        $model->sync();
     }
 
 
