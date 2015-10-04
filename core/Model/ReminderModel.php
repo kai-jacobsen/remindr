@@ -5,6 +5,8 @@ namespace SVKJ\Remindr\Model;
 use SVKJ\Remindr\UI\Inputs\CustomDateInput;
 use SVKJ\Remindr\UI\Inputs\DateInput;
 use SVKJ\Remindr\UI\Inputs\TargetInput;
+use SVKJ\Remindr\UI\Inputs\TextInput;
+use SVKJ\Remindr\UI\Inputs\TimestampInput;
 use SVKJ\Remindr\UI\Inputs\TypeInput;
 
 
@@ -37,6 +39,11 @@ class ReminderModel
     public $customdate;
 
     /**
+     * @var
+     */
+    public $timestamp;
+
+    /**
      * @var string
      */
     public $noticemsg;
@@ -65,7 +72,10 @@ class ReminderModel
         $this->target = new TargetInput( 'target', $this );
         $this->type = new TypeInput( 'type', $this );
         $this->date = new DateInput( 'date', $this );
-        $this->customdate = new CustomDateInput('customdate', $this);
+        $this->customdate = new CustomDateInput( 'customdate', $this );
+        $this->timestamp = new TimestampInput( 'timestamp', $this );
+        $this->noticemsg = new TextInput('noticemsg', $this);
+        $this->mailmsg = new TextInput('mailmsg', $this);
         $this->refresh();
     }
 
@@ -97,7 +107,7 @@ class ReminderModel
 
         foreach ($map as $key => $value) {
             if (is_object( $this->$key )) {
-                if (!is_null( $this->$key->value && $this->$key->value !== $value )) {
+                if (!is_null( $this->$key->value ) && $this->$key->value != $value) {
                     $this->$key->changed = true;
                 }
                 $this->$key->setValue( $value );

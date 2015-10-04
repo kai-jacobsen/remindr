@@ -1,5 +1,5 @@
 <?php
-d( $this->model );
+d( $this->model->get( 'timestamp' )->value );
 ?>
 <div class="remindr-wrap wrap">
     <div class="remindr-inner">
@@ -64,7 +64,7 @@ d( $this->model );
                         <br>
                         <label>
                             <input
-                                <?php checked( $this->model->get( 'date' )->getValue(), '2592000    ' ) ?>
+                                <?php checked( $this->model->get( 'date' )->getValue(), '2592000' ) ?>
                                 type="radio"
                                 name="<?php echo $this->fieldName( 'date' ); ?>"
                                 value="2592000">
@@ -87,9 +87,10 @@ d( $this->model );
                     <?php _e( 'Notice message', 'yxcasd' ); ?>
                 </th>
                 <td>
-                    <textarea class="large-text" rows="3" name="<?php echo $this->fieldName( 'noticemsg' ); ?>">
-
-                    </textarea>
+                    <textarea class="large-text" rows="3"
+                              name="<?php echo $this->fieldName( 'noticemsg' ); ?>"><?php echo $this->model->get(
+                            'noticemsg'
+                        )->value ?></textarea>
                 </td>
             </tr>
             <tr>
@@ -99,7 +100,7 @@ d( $this->model );
                 <td>
                     <?php
                     wp_editor(
-                        '',
+                        $this->model->get( 'mailmsg' )->value,
                         'remindrmailmsg',
                         array( 'media_buttons' => false, 'textarea_name' => $this->fieldName( 'mailmsg' ) )
                     );
