@@ -17,13 +17,11 @@ abstract class AbstractInput
      * @var null|int
      */
     public $value = null;
-
+    public $changed = false;
     /**
      * @var ReminderModel
      */
     protected $model;
-
-    public $changed = false;
 
     /**
      * @param $key
@@ -72,7 +70,8 @@ abstract class AbstractInput
     /**
      * @return bool
      */
-    public function hasChanged(){
+    public function hasChanged()
+    {
         return $this->changed;
     }
 }

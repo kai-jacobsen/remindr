@@ -30,6 +30,7 @@ class EditScreen
 
     public function run()
     {
+        add_action('admin_enqueue_scripts', array($this, 'enqueue'));
         add_action( 'edit_form_after_title', array( $this, 'setupForm' ) );
     }
 
@@ -45,6 +46,12 @@ class EditScreen
      */
     public function fieldName($key){
         return $this->basename . '[' . $key . ']';
+    }
+
+    public function enqueue()
+    {
+        wp_enqueue_style('remindr-css', Remindr::getInstance()->getPluginUrl() . 'assets/remindr.css');
+        wp_enqueue_script('remindr-js', Remindr::getInstance()->getPluginUrl() . 'assets/js/dist/app.js', array('jquery', 'backbone', 'underscore'));
     }
 
 }

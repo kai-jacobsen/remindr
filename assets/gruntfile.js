@@ -14,7 +14,7 @@ module.exports = function (grunt) {
         },
         files: {
           'js/dist/plugins.js': ['<%= concat.plugins.dest %>'],
-          'js/dist/app.js': ['<%= concat.app.dest %>']
+          //'js/dist/app.js': ['js/dev/app.js'],
         }
       },
       dev: {
@@ -36,28 +36,15 @@ module.exports = function (grunt) {
         src: ['js/dev/plugins/**/*.js'],
         dest: 'js/tmp/plugins.concat.js',
         nonull: true
-      },
-      app: {
-        src: ['js/dev/**/*.js'],
-        dest: 'js/tmp/app.concat.js',
-        nonull: true
       }
     },
     watch: {
       options: {
         livereload: true
       },
-      twig: {
-        files: ['core/modules/**/*.twig'],
-        tasks: []
-      },
       js: {
-        files: ['js/dev/**/**/*.js', 'js/dev/**/*.js', 'js/**/*.hbs'],
+        files: ['js/dev/**/**/*.js', 'js/dev/**/*.js'],
         tasks: ['devjs']
-      },
-      sprites: {
-        files: ['images/_sprites/*'],
-        tasks: ['exec:sprites']
       },
       sass: {
         options: {
@@ -69,31 +56,38 @@ module.exports = function (grunt) {
       css: {
         files: ['*.css'],
         tasks: []
-      },
-      hbs: {
-        files: ['js/**/*.hbs'],
-        tasks: []
       }
     },
     clean: ["js/tmp"],
+    browserify: {
+      options: {
+        browserifyOptions: {
+          paths: ["./js"],
+          fast: true,
+          detectGlobals: false
+        }
+      },
+      app: {
+        src: 'js/dev/app.js',
+        dest: 'js/dist/app.js'
+      }
+    },
     autoprefixer: {
       // prefix the specified file
       single_file: {
-        src: 'app.css',
-        dest: 'app.css'
+        src: 'remindr.css',
+        dest: 'remindr.css'
       }
     },
     sass: {
       options: {                       // Target options
         outputStyle: 'compressed',
-        includePaths: ['bower_components/foundation/scss'],
         sourceMap: false,
-        sourceComments: false
+        sourceComments: true
       },
       dist: {                            // Target
         files: {                         // Dictionary of files
-          'app.css': 'scss/app.scss',
-          'login.css': 'scss/login.scss'
+          'remindr.css': 'scss/remindr.scss'
         }
       }
     }
@@ -107,9 +101,11 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-autoprefixer');
   grunt.loadNpmTasks('grunt-notify');
+  grunt.loadNpmTasks('grunt-browserify');
 
   // Default task(s).
-  grunt.registerTask('default', ['concat', 'uglify', 'compass:dev', 'autoprefixer', 'clean', 'jshint']);
+  grunt.registerTask('default', ['concat', 'uglify', 'autoprefixer', 'clean', 'jshint']);
   grunt.registerTask('cssdev', ['sass', 'autoprefixer']);
-  grunt.registerTask('devjs', ['concat', 'uglify', 'clean']);
+  grunt.registerTask('devjs', ['browserify', 'concat', 'uglify', 'clean']);
+  //grunt.registerTask('devjs', ['browserify','concat', 'uglify', 'clean']);
 };

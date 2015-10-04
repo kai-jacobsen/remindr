@@ -21,7 +21,7 @@ d( $this->model->get( 'timestamp' )->value );
                 <th>
                     <?php _e( 'Type of notice', 'yxcasd' ); ?>
                 </th>
-                <td>
+                <td id="remindr-type">
                     <fieldset>
                         <label>
                             <input <?php checked( $this->model->get( 'type' )->getValue(), 'adminnotice' ) ?>
@@ -82,7 +82,7 @@ d( $this->model->get( 'timestamp' )->value );
                     </fieldset>
                 </td>
             </tr>
-            <tr>
+            <tr class="remindr-noticemsg remindr-hide">
                 <th>
                     <?php _e( 'Notice message', 'yxcasd' ); ?>
                 </th>
@@ -93,7 +93,7 @@ d( $this->model->get( 'timestamp' )->value );
                         )->value ?></textarea>
                 </td>
             </tr>
-            <tr>
+            <tr class="remindr-mailmsg remindr-hide">
                 <th>
                     <?php _e( 'Mail message', 'yxcasd' ); ?>
                 </th>
