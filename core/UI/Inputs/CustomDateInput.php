@@ -12,15 +12,19 @@ class CustomDateInput extends AbstractInput
 
     public function prepare()
     {
-        $timestamp = $this->model->get('timestamp')->getValue();
-        $this->value = date('d.m.Y H:i:s', $timestamp);
+        $timestamp = $this->model->get( 'timestamp' )->getValue();
+        if (is_int($timestamp)){
+            $this->value = date( 'd.m.Y H:i:s', $timestamp );
+        }
     }
 
     /**
      * @param $value
      */
-    public function setValue($value){
-        $this->value = filter_var($value, FILTER_SANITIZE_STRING);
+    public function setValue( $value )
+    {
+        $this->value = filter_var( $value, FILTER_SANITIZE_STRING );
     }
+
 
 }

@@ -28,7 +28,19 @@ class DateInput extends AbstractInput
      */
     public function sync()
     {
+        /*
+         * type has not changed, value may
+         */
         if (!$this->hasChanged()) {
+
+            if ($this->getValue() === 'custom') {
+                $cdate = $this->model->get( 'customdate' );
+                if ($cdate->hasChanged()){
+                    $this->model->get( 'timestamp' )->setValue( $this->str2time( $cdate->getValue() ) );
+                    $this->model->get( 'timestamp' )->sync();
+                }
+            }
+
             return null;
         }
 

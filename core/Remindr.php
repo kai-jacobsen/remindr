@@ -93,9 +93,13 @@ class Remindr
 
     public function savePost( $post_id, $post )
     {
+        if (!isset( $_POST['svkj_remindr'] )) {
+            return null;
+        }
+
         $data = $_POST['svkj_remindr'];
-        $model = new ReminderModel($post);
-        $model->set($data);
+        $model = new ReminderModel( $post );
+        $model->set( $data );
         $model->sync();
     }
 

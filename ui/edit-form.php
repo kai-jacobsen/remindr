@@ -1,6 +1,3 @@
-<?php
-d( $this->model->get( 'timestamp' )->value );
-?>
 <div class="remindr-wrap wrap">
     <div class="remindr-inner">
         <table class="form-table">
@@ -77,7 +74,7 @@ d( $this->model->get( 'timestamp' )->value );
                                 name="<?php echo $this->fieldName( 'date' ); ?>"
                                 value="custom">
                             <?php _e( 'Custom date', 'yxcasd' ); ?></label>
-                        <input type="text" name="<?php echo $this->fieldName( 'customdate' ); ?>"
+                        <input id="remindr-dtpicker" type="text" name="<?php echo $this->fieldName( 'customdate' ); ?>"
                                value="<?php echo $this->model->get( 'customdate' )->getValue() ?>">
                     </fieldset>
                 </td>
